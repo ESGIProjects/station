@@ -13,8 +13,8 @@ int timezone = 1;
 int dst = 0;
 
 void setup() {
-  Serial.begin(115200);
-  Serial.setDebugOutput(true);
+  Serial.begin(9600);
+  Serial1.begin(9600);
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -38,7 +38,7 @@ void loop() {
   now_tm = localtime(&now);
   hour = now_tm->tm_hour;
   minute = now_tm->tm_min;
-  Serial.println(hour);
-  Serial.println(minute);
+  Serial1.write(hour);
+  Serial1.write(minute);
   delay(1000);
 }
