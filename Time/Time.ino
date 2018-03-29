@@ -8,6 +8,7 @@ time_t now;
 struct tm *now_tm;
 int hour;
 int minute;
+String timer;
 
 int timezone = 1;
 int dst = 0;
@@ -38,7 +39,17 @@ void loop() {
   now_tm = localtime(&now);
   hour = now_tm->tm_hour;
   minute = now_tm->tm_min;
-  Serial1.write(hour);
-  Serial1.write(minute);
+  //Serial.print(String(hour)+String(minute));
+  
+  timer = (String(hour)+String(minute));
+  Serial.println(timer);
+  writeString(timer);
   delay(1000);
+}
+
+void writeString(String data){
+  for(int i = 0; i < data.length(); i++){
+    Serial1.write(data[i]);
+  }
+  Serial1.write('\0');
 }
