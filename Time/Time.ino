@@ -14,12 +14,16 @@ int timezone = 1;
 int dst = 0;
 
 void setup() {
+  // Init Serial connection
   Serial.begin(9600);
   Serial1.begin(9600);
 
+  // Init Wi-Fi component
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Serial.println("\nConnecting to WiFi");
+
+  // Waiting for connection...
   while (WiFi.status() != WL_CONNECTED) {
     Serial.print(".");
     delay(1000);
@@ -27,6 +31,7 @@ void setup() {
 
   configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
   Serial.println("\nWaiting for time");
+  
   while (!time(nullptr)) {
     Serial.print(".");
     delay(1000);
@@ -48,8 +53,12 @@ void loop() {
 }
 
 void writeString(String data){
+
+  // Send each character of the string as a byte
   for(int i = 0; i < data.length(); i++){
     Serial1.write(data[i]);
   }
+
+  // Send end sequence
   Serial1.write('\0');
 }

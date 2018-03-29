@@ -267,26 +267,26 @@ void newData() {
 	  switch (type) {
 		case 't':
 		  // Display the temperature
-		  digit1 = (int)bytes[2] - 48;
-		  digit2 = (int)bytes[3] - 48;
+		  digit1 = (int)bytes[1] - 48;
+		  digit2 = (int)bytes[2] - 48;
 		  digit3 = OFF;
 		  digit4 = TEMPERATURE;
 		  break;
 
 		case 'h':
 		 // Display the humidity value
-		  digit1 = (int)bytes[2] - 48;
-		  digit2 = (int)bytes[3] - 48;
+		  digit1 = (int)bytes[1] - 48;
+		  digit2 = (int)bytes[2] - 48;
 		  digit3 = OFF;
 		  digit4 = HUMIDITY;
 		  break;
 
 		case 'd':
-		// Display the date (not tested yet)
-		  digit1 = (int)bytes[2] - 48;
-		  digit2 = (int)bytes[3] - 48;
-		  digit3 = (int)bytes[4] - 48;
-		  digit4 = (int)bytes[5] - 48;
+		  // Display the date (not tested yet)
+		  digit1 = (int)bytes[1] - 48;
+		  digit2 = (int)bytes[2] - 48;
+		  digit3 = (int)bytes[3] - 48;
+		  digit4 = (int)bytes[4] - 48;
 		  break;
 
 		default:
