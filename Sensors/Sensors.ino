@@ -1,6 +1,4 @@
 #include "DHT.h"
-#include <ESP8266WiFi.h>
-#include <time.h>
 
 #define DHTPIN 2
 #define DHTTYPE DHT11
@@ -16,44 +14,19 @@ float h;
 String humidity;
 String temp;
 
-const char* ssid = "ESGI";
-const char* password = "Reseau-GES";
-
-int timezone = 3;
-int dst = 0;
-
 void setup() {
   Serial.begin(9600);
   Serial1.begin(9600);
   dht.begin();
   pinMode(3,INPUT);
-/*
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-  Serial.println("\nConnecting to WiFi");
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    delay(1000);
-  }
-
-  configTime(3 * 3600, 0, "pool.ntp.org", "time.nist.gov");
-  Serial.println("\nWaiting for time");
-  while (!time(nullptr)) {
-    Serial.print(".");
-    delay(1000);
-  }
-  Serial.println("");*/
 }
 
 void loop() {
+  if(Serial1.available() > 0){
+    Serial.println(Serial1.read());
+  }
 
-  time_t now = time(nullptr);
-  //Serial.print(hour(now));
-  Serial.println(ctime(&now));
-  delay(1000);
-
-  /*
-  buttonState = digitalRead(button);
+  /*buttonState = digitalRead(button);
   if(buttonState == HIGH){
     if(state == 1){
       state = 0;
