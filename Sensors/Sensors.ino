@@ -8,27 +8,33 @@ int button = 3;
 int buttonState = 0;
 int state = 0;
 
+int buzzer = 4;
+
 float t;
 float h;
 
 String humidity;
 String temp;
 
+int incomingByte = 0;
+int index = 0;
+char bytes[15];
+
 void setup() {
   Serial.begin(9600);
   Serial1.begin(9600);
   dht.begin();
   pinMode(3,INPUT);
+  pinMode(4,OUTPUT);
 }
 
 void loop() {
-  if(Serial1.available() > 0){
-    Serial.println(Serial1.read());
-  }
-
-  /*buttonState = digitalRead(button);
+  buttonState = digitalRead(button);
   if(buttonState == HIGH){
-    if(state == 1){
+    tone(buzzer, 800);
+    delay(500);
+    noTone(buzzer); 
+    if(state == 2){
       state = 0;
     }
     else{
@@ -36,6 +42,17 @@ void loop() {
     }
   }
   if(state == 0){
+    if(Serial1.available() > 0){
+      incomingByte = Serial1.read();
+      bytes[index++] = incomingByte;
+      if (incomingByte == '\0') {
+        String str = String(bytes);
+        Serial.println(str);
+        writeString(str);
+      }
+    }
+  }
+  else if(state == 1){
     float t = dht.readTemperature();
     delay(300);
     if (isnan(t)) {
@@ -50,7 +67,7 @@ void loop() {
       writeString(temp);
     }
   }
-  else if(state == 1){
+  else if(state == 2){
     float h = dht.readHumidity();
     delay(300);
     if (isnan(h)) {
@@ -65,7 +82,7 @@ void loop() {
       writeString(humidity);
     } 
   }
-  delay(1000);*/
+  delay(1000);
 }
 
 void writeString(String data){
