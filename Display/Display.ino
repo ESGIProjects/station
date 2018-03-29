@@ -1,3 +1,5 @@
+#include <SoftwareSerial.h>
+
 int d1 = 13;
 int d2 = 10;
 int d3 = 9;
@@ -13,7 +15,7 @@ int dot = 4;
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(d1, OUTPUT);
+  /*pinMode(d1, OUTPUT);
   pinMode(d2, OUTPUT);
   pinMode(d3, OUTPUT);
   pinMode(d4, OUTPUT);
@@ -23,13 +25,33 @@ void setup() {
   pinMode(segD, OUTPUT);
   pinMode(segE, OUTPUT);
   pinMode(segF, OUTPUT);
-  pinMode(segG, OUTPUT);
+  pinMode(segG, OUTPUT); */
+
+  Serial.begin(9600);
+  Serial1.begin(9600);
+
+  while (!Serial1) { }
+  
 }
 
+char bytes[15];
+int index = 0;
+int inByte = 0;
+
 void loop() {
-  writeDigit(1, 0);
-  writeDigit(2, 0);
-  writeDigit(3, 0);
+  if (Serial1.available() > 0) {
+
+    inByte = Serial1.read();
+    bytes[index++] = inByte;
+
+    if (inByte == '\0') {
+      String str = String(bytes);
+      Serial.println(str);
+
+      str2display(str);      
+      index = 0;
+    }    
+  }
 }
 
 void writeDigit(int screen, int digit) {
@@ -179,3 +201,40 @@ void writeDigit(int screen, int digit) {
   delay(1);
 }
 
+void str2display(String str) {
+
+      char type = str.charAt(0);
+      //char type = (char)bytes[0];
+      Serial.println(type);
+
+      int value1, value2, value3, value4;
+
+      switch (type) {
+        case 'h':
+          value1 = (int)bytes[2] - 48;
+          value2 = (int)bytes[3] - 48;
+
+          writeDigit(2, value1);
+          //writeDigit(3, value2);
+          // afficher H
+        case 't':
+          value1 = (int)bytes[2] - 48;
+          value2 = (int)bytes[3] - 48;
+
+          writeDigit(2, value1);
+          writeDigit(3, value2);
+          // afficher C
+        case 'd':
+          value1 = (int)bytes[2] - 48;
+          value2 = (int)bytes[3] - 48;
+          value3 = (int)bytes[4] - 48;
+          value4 = (int)bytes[5] - 48;
+
+          writeDigit(1, value1);
+          writeDigit(2, value2);
+          writeDigit(3, value3);
+          writeDigit(4, value4);
+        default:
+          break;
+      }
+}
