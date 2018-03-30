@@ -1,6 +1,11 @@
 #include <ESP8266WiFi.h>
 #include <time.h>
 
+
+
+// UNUSED
+
+
 const char* ssid = "ESGI";
 const char* password = "Reseau-GES";
 
