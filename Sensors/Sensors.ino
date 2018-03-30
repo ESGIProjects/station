@@ -35,6 +35,8 @@ String humidity, temp, currentTime;
 char bytes[15];
 int incomingByte = 0, index = 0;
 
+unsigned long lastSensorReading = 0, now = 0, intervalBetweenReadings = 300;
+
 void setup() {
   // Setting up pin mode for each
   pinMode(button, INPUT);
@@ -89,21 +91,23 @@ void loop() {
   switch (state) {
     case true:
       t = dht.readTemperature();
-      delay(300);
-
-      if (isnan(t)) {
-        Serial.println("Failed to read TEMP!");
-        return;
-      }
-      else {
-        temp = "t" + String(t); // to try: format the float with something like %.0f
-        
-        Serial.print("Temperature: ");
-        Serial.print(t);
-        Serial.println("C");
-
-        // Send data
-        writeString(temp);
+      now = millis();
+      if (now - lastSensorReading >= intervalBetweenReadings) {
+  
+        if (isnan(t)) {
+          Serial.println("Failed to read TEMP!");
+          return;
+        }
+        else {
+          temp = "t" + String(t); // to try: format the float with something like %.0f
+          
+          Serial.print("Temperature: ");
+          Serial.print(t);
+          Serial.println("C");
+  
+          // Send data
+          writeString(temp);
+        }
       }
       
       break;
@@ -111,26 +115,28 @@ void loop() {
     case false:
 
       h = dht.readHumidity();
-      delay(300);
-
-      if (isnan(h)) {
-        Serial.println("Failed to read HUMIDITY!");
-        return;
-      }
-      else {
-        humidity = "h" + String(h); 
-
-        Serial.print("Humidity: ");
-        Serial.print(h);
-        Serial.println("%");
-
-        // Send data
-        writeString(humidity);
+      
+      now = millis();
+      if (now - lastSensorReading >= intervalBetweenReadings) {
+        if (isnan(h)) {
+          Serial.println("Failed to read HUMIDITY!");
+          return;
+        }
+        else {
+          humidity = "h" + String(h); 
+  
+          Serial.print("Humidity: ");
+          Serial.print(h);
+          Serial.println("%");
+  
+          // Send data
+          writeString(humidity);
+        }
       }
       break;
   }
   // Wait 1s before sending new data
-  delay(1000);
+  delay(200);
 }
 
 void writeString(String data){
